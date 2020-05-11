@@ -5,6 +5,7 @@ run.json
 model.json
 config.json
 temp/
+outputs/
 
 
 # Byte-compiled / optimized / DLL files

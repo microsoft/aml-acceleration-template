@@ -6,7 +6,7 @@ This document shares the commands on how to run training and real-time inferenci
 
 Attach the folder with the model code to the AML workspace (run this command from `src/model1/`):
 ```
-az ml folder attach -g aml-demo-we -w aml-demo-we
+az ml folder attach -g aml-demo -w aml-demo
 ```
 
 This connects the model folder to the workspace in AML.

@@ -15,7 +15,7 @@ This connects the model folder to the workspace in AML.
 
 Train locally with Python (without AML):
 ```
-python train.py --data-path /path/to/data
+python train.py --data-path ../../sample-data/
 ```
 
 Train on local Docker container, but log metrics to AML:
@@ -30,7 +30,7 @@ az ml run submit-script -c train-amlcompute -e aml-poc-amlcompute
 
 ## Model management
 
-Register model to model registry in AML:
+Register model to model registry in AML (from local path):
 ```
 az ml model register -n demo-model --asset-path outputs/model.pkl
 ```

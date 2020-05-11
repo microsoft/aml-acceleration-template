@@ -1,14 +1,4 @@
----
-page_type: sample
-languages:
-- csharp
-products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
----
-
-# Official Microsoft Sample
+# Azure Machine Learning Acceleration Template
 
 <!-- 
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -18,20 +8,19 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-Give a short description for your sample here. What does it do and why is it important?
+This repo features a Azure Machine Learning (AML) Acceleration template which enables you to quickly onboard your existing Machine Learning code to AML. The template enables a smooth ML development process between your local machine and the Azure Cloud. Furthermore, it includes simple examples for running your model training and batch inferecing as [Machine Learning Pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines) for automation.
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
+This repo follows a pre-defined structure for storing your model code, pipelines, etc.
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
+| `src\`             | Model code and other required code assets. |
+| `src\model1`     | A full end-to-end example for training, real-time and batch inferencing and automation. |
+| `pipelines-yaml\`  | A set of [YAML-based ML pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/reference-pipeline-yaml).      |
+| `pipelines-py\`    | A set of Python-based ML pipelines.             |
+
 
 ## Prerequisites
 
@@ -48,6 +37,14 @@ Outline step-by-step instructions to execute the sample and see its output. Incl
 ## Key concepts
 
 Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+
+
+## Authors
+
+* Clemens Siebler, AI Technical Specialist GBB EMEA
+* Erik Zwiefel, AI Principal Technical Specialist GBB Americas
+* Alan Weaver, AI Senior Technical Specialist GBB EMEA
+* Alexander Zeltov, AI Principal Technical Specialist GBB Americas
 
 ## Contributing
 

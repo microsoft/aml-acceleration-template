@@ -8,6 +8,9 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
+<img src="instructions/media/aml_logo.png" width="300px" />
+
+
 This repo features a Azure Machine Learning (AML) Acceleration template which enables you to quickly onboard your existing Machine Learning code to AML. The template enables a smooth ML development process between your local machine and the Azure Cloud. Furthermore, it includes simple examples for running your model training and batch inferecing as [Machine Learning Pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines) for automation.
 
 If you want to follow a structured approach to use this repo, start with [migrating your first workload to AML](instructions/README.md) and walk through the separate sections.
@@ -18,12 +21,12 @@ This repo follows a pre-defined structure for storing your model code, pipelines
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
-| `instructions\`   | A step-by-step guide on how to onboard your first workload to AML. |
-| `sample-data\`   | Some small sample data used for the template example. |
-| `src\`             | Model code and other required code assets. |
-| `src\model1`     | A full end-to-end example for training, real-time and batch inferencing and automation. |
-| `pipelines-yaml\`  | A set of [YAML-based ML pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/reference-pipeline-yaml).      |
-| `pipelines-py\`    | A set of Python-based ML pipelines.             |
+| `instructions\`   | A step-by-step guide on how to onboard your first workload to AML |
+| `sample-data\`   | Some small sample data used for the template example |
+| `src\`             | Model code and other required code assets |
+| `src\model1`     | A full end-to-end example for training, real-time and batch inferencing and automation |
+| `pipelines-yaml\`  | A set of [YAML-based ML pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/reference-pipeline-yaml)      |
+| `pipelines-py\`    | A set of Python-based ML pipelines             |
 
 
 ## Prerequisites

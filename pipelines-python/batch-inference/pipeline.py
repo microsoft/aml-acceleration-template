@@ -8,10 +8,10 @@ from azureml.data.dataset_consumption_config import DatasetConsumptionConfig
 from azureml.contrib.pipeline.steps import ParallelRunConfig 
 from azureml.contrib.pipeline.steps import ParallelRunStep 
 
-dataset_name = 'german-credit-filedataset'
-source_directory = '../../src/model1/'
-runconfig = 'pipeline.runconfig'
-model_name = "demo-model"
+dataset_name =  os.getenv('DATASET', 'german-credit-filedataset')
+source_directory = os.getenv('SOURCE_DIRECTORY', '../../src/model1/')
+runconfig = os.getenv('RUNCONFIG', 'pipeline.runconfig')
+model_name = os.getenv('MODEL_NAME', 'demo-model')
 
 print("SDK version:", azureml.core.VERSION)
 

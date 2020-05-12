@@ -5,10 +5,10 @@ from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfigura
 from azureml.pipeline.core import Pipeline
 from azureml.pipeline.steps import PythonScriptStep
 
-dataset_name = 'german-credit-filedataset'
-dataset_mountpath = '/data'
-source_directory = '../../src/model1/'
-runconfig = 'pipeline.runconfig'
+dataset_name =  os.getenv('DATASET', 'german-credit-filedataset')
+dataset_mountpath = os.getenv('DATASET_MOUNTPATH', '/data')
+source_directory = os.getenv('SOURCE_DIRECTORY', '../../src/model1/')
+runconfig = os.getenv('RUNCONFIG', 'pipeline.runconfig')
 
 print("SDK version:", azureml.core.VERSION)
 

@@ -80,9 +80,5 @@ az ml service delete --name test-deploy-aks
 
 ## Pipeline execution
 
-Execute pipeline (need to be ran from inside the pipeline folders):
-
-```
-az ml run submit-pipeline -n pipeline-test-exp -y pipeline.yml
-```
-
+* For Python-based pipelines, have a look at [`pipelines-python/README.md`](../../pipelines-python/README.md)
+* For YAML-based pipelines, have a look at [`pipelines-yaml/README.md`](../../pipelines-yaml/README.md)

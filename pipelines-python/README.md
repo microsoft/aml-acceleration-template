@@ -1,6 +1,6 @@
 # Instructions
 
-You can run each pipeline by simply running:
+From within the directory of each pipeline, you can run it via:
 
 ```
 python pipeline.py

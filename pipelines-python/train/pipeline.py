@@ -1,24 +1,25 @@
 import os
+import argparse
 import azureml.core
 from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfiguration
-
-from azureml.pipeline.core import Pipeline
+from azureml.core.compute import AmlCompute
+from azureml.core.compute import ComputeTarget
+from azureml.pipeline.core import Pipeline, PipelineData
 from azureml.pipeline.steps import PythonScriptStep
-
+from azureml.core.authentication import AzureCliAuthentication
 print("Pipeline SDK-specific imports completed")
 # Check core SDK version number
 print("Azure ML SDK version:", azureml.core.VERSION)
 
 parser = argparse.ArgumentParser("pipelines_master")
-parser.add_argument("--aml_compute_target", type=str, help="compute target name", dest="aml_compute_target", required=True)
 parser.add_argument("--model_name", type=str, help="model name", dest="model_name", required=True)
-parser.add_argument("--build_number", type=str, help="build number", dest="build_number", required=True)
+parser.add_argument("--build_number", type=str, help="build number", dest="build_number", required=False)
 parser.add_argument("--image_name", type=str, help="image name", dest="image_name", required=True)
 parser.add_argument("--path", type=str, help="path", dest="path", required=True)
-
 parser.add_argument("--dataset", type=str, help="dataset", dest="dataset", required=True)
 parser.add_argument("--dataset_mountpath", type=str, help="dataset_mountpath", dest="dataset_mountpath", required=True)
 parser.add_argument("--runconfig", type=str, help="runconfig", dest="runconfig", required=True)
+parser.add_argument("--source_directory", type=str, help="source_directory", dest="source_directory", required=True)
 args = parser.parse_args()
 
 #dataset_name =  os.getenv('DATASET', 'german-credit-filedataset')
@@ -27,14 +28,14 @@ args = parser.parse_args()
 #runconfig = os.getenv('RUNCONFIG', 'pipeline.runconfig')
 
 
-print("Argument 1: %s" % args.aml_compute_target)
-print("Argument 2: %s" % args.model_name)
-print("Argument 3: %s" % args.build_number)
-print("Argument 4: %s" % args.image_name)
-print("Argument 5: %s" % args.path)
-print("Argument 6: %s" % args.dataset)
-print("Argument 7: %s" % args.dataset_mountpath)
-print("Argument 8: %s" % args.runconfig)
+print("Argument source_directory %s" % args.source_directory)
+print("Argument model_name: %s" % args.model_name)
+print("Argument build_number: %s" % args.build_number)
+print("Argument image_name: %s" % args.image_name)
+print("Argument path: %s" % args.path)
+print("Argument dataset: %s" % args.dataset)
+print("Argument dataset_mountpath: %s" % args.dataset_mountpath)
+print("Argument runconfig: %s" % args.runconfig)
 
 print('creating AzureCliAuthentication...')
 cli_auth = AzureCliAuthentication()
@@ -42,11 +43,13 @@ print('done creating AzureCliAuthentication!')
 
 print('get workspace...')
 ws = Workspace.from_config(path=args.path, auth=cli_auth)
+print('Workspace name: ' + ws.name, 
+      'Azure region: ' + ws.location, 
+      'Subscription id: ' + ws.subscription_id, 
+      'Resource group: ' + ws.resource_group, sep = '\n')
+      
 print('done getting workspace!')
 
-print("looking for existing compute target.")
-aml_compute = AmlCompute(ws, args.aml_compute_target)
-print("found existing compute target.")
 
 
 scripts_folder = 'scripts'
@@ -55,24 +58,20 @@ def_blob_store = ws.get_default_datastore()
 train_output = PipelineData('train_output', datastore=def_blob_store)
 print("train_output PipelineData object created")
 
-
-ws = Workspace.from_config()
-print(ws.name, ws.resource_group, ws.location, ws.subscription_id, sep = '\n')
-
 print('--------------------------')
-print(runconfig)
-base_dir= 'pipelines-python/train/'
-filepath = os.path.join(base_dir, 'pipeline.runconfig')
-print(filepath)
+print(args.runconfig)
+#runconfig = os.path.join(args.path, 'args.runconfig')
+#print(runconfig)
 
-runconfig = RunConfiguration.load(runconfig)
-
-input_ds = Dataset.get_by_name(ws, dataset_name)
-training_data = input_ds.as_named_input('training_dataset').as_mount(path_on_compute=dataset_mountpath)
+#runconfig = RunConfiguration.load(args.path,args.runconfig)
+runconfig = RunConfiguration.load(args.runconfig)
+    
+input_ds = Dataset.get_by_name(ws, args.dataset)
+training_data = input_ds.as_named_input('training_dataset').as_mount(path_on_compute=args.dataset_mountpath)
 
 
 train_step = PythonScriptStep(name="train-step",
-                        source_directory=source_directory,
+                        source_directory=args.source_directory,
                         runconfig=runconfig,
                         inputs=[training_data],
                         script_name=runconfig.script,
@@ -87,5 +86,5 @@ pipeline.validate()
 #pipeline_run = Experiment(ws, 'train-pipe').submit(pipeline)
 #pipeline_run.wait_for_completion()
 
-published_pipeline = pipeline.publish(pipeline_name)
+published_pipeline = pipeline.publish(args.model_name)
 print("Published pipeline id: ", published_pipeline.id)

@@ -1,0 +1,13 @@
+export resourcegroup="mlops-quickstart"
+export workspace="mlops-quickstart"
+export experiment="aml-accelerator-exp"
+export aml_compute_target="cpucluster"
+export model_name="aml-accelerator"
+export image_name="aml-accelerator-image"
+export dataset="german-credit-filedataset"
+export dataset_mountpath="/data"
+export runconfig="/Users/azeltov/git/aml-acceleration-template/pipelines-python/train/pipeline.runconfig"
+export path="/Users/azeltov/git/aml-acceleration-template/"
+export source_directory="src/model1"
+
+python ./pipelines-python/train/pipeline.py --aml_compute_target $aml_compute_target   --model_name $model_name --build_number 1 --image_name $image_name --dataset $dataset --dataset_mountpath $dataset_mountpath --runconfig $runconfig --path $path

@@ -13,7 +13,7 @@ variables:
   image_name: 'aml-accelerator-image'
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'aml_accelarator_svc_conn'
-  
+
 steps:
 
 - task: UsePythonVersion@0
@@ -48,8 +48,19 @@ steps:
     azureSubscription: '$(azureServiceConnectionId)'
     scriptLocation: inlineScript
     inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
-    ./aml_service/create_aml_cluster.py --aml_compute_target $(aml_compute_target) 
+    ./environment_setup/create_aml_cluster.py --aml_compute_target $(aml_compute_target) 
     --path $(Build.SourcesDirectory)'
+
+- task: AzureCLI@1
+  displayName: 'Master Pipeline'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
+    ./pipelines-python/train/pipeline.py --aml_compute_target $(aml_compute_target) 
+    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --path $(Build.SourcesDirectory)'
+
+    
 
 - task: AzureCLI@1
   displayName: 'Master Pipeline'

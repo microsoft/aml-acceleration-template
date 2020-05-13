@@ -1,19 +1,76 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'Ubuntu-16.04'
 
+variables:
+  resourcegroup: 'mlops-quickstart'
+  workspace: 'mlops-quickstart'
+  experiment: 'aml-accelerator-exp'
+  aml_compute_target: 'cpucluster'
+  model_name: 'aml-accelerator'
+  image_name: 'aml-accelerator-image'
+  # Azure Resource Manager connection created during pipeline creation
+  azureServiceConnectionId: 'aml_accelarator_svc_conn'
+  
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+    architecture: 'x64'   
+
+- task: Bash@3
+  displayName: 'Install Requirements'
+  inputs:
+    targetType: filePath
+    filePath: 'environment_setup/install_requirements.sh'
+    workingDirectory: 'environment_setup'
+
+- task: AzureCLI@1
+  displayName: 'Install the CLI'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'az extension add -n azure-cli-ml'
+
+- task: AzureCLI@1
+  displayName: 'Attach folder to workspace'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'az ml folder attach -e $(experiment) -w $(workspace) -g $(resourcegroup) --path $(Build.SourcesDirectory)'
+
+- task: AzureCLI@1
+  displayName: 'Get or create AML Compute Target'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
+    ./aml_service/create_aml_cluster.py --aml_compute_target $(aml_compute_target) 
+    --path $(Build.SourcesDirectory)'
+
+- task: AzureCLI@1
+  displayName: 'Master Pipeline'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
+    ./aml_service/pipelines_master.py --aml_compute_target $(aml_compute_target) 
+    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --path $(Build.SourcesDirectory)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '**'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: devops-for-ai'
+  inputs:
+    ArtifactName: 'devops-for-ai'
+    publishLocation: 'container'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    TargetPath: '$(Build.ArtifactStagingDirectory)'

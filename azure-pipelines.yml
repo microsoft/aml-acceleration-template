@@ -11,6 +11,10 @@ variables:
   aml_compute_target: 'cpucluster'
   model_name: 'aml-accelerator'
   image_name: 'aml-accelerator-image'
+  dataset: 'german-credit-filedataset'
+  dataset_mountpath: '/data'
+  runconfig: 'pipeline.runconfig'
+  
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'aml_accelarator_svc_conn'
 
@@ -58,18 +62,7 @@ steps:
     scriptLocation: inlineScript
     inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
     ./pipelines-python/train/pipeline.py --aml_compute_target $(aml_compute_target) 
-    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --path $(Build.SourcesDirectory)'
-
-    
-
-- task: AzureCLI@1
-  displayName: 'Master Pipeline'
-  inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
-    scriptLocation: inlineScript
-    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
-    ./aml_service/pipelines_master.py --aml_compute_target $(aml_compute_target) 
-    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --path $(Build.SourcesDirectory)'
+    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --dataset $(dataset) --dataset_mountpath $(dataset_mountpath) --runconfig $(runconfig) --path $(Build.SourcesDirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
@@ -79,9 +72,9 @@ steps:
     Contents: '**'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: devops-for-ai'
+  displayName: 'Publish Artifact: $(model_name)'
   inputs:
-    ArtifactName: 'devops-for-ai'
+    ArtifactName: '$(model_name)'
     publishLocation: 'container'
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
     TargetPath: '$(Build.ArtifactStagingDirectory)'

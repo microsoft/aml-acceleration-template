@@ -63,15 +63,6 @@ steps:
     inlineScript: 'python  $(Build.SourcesDirectory)/pipelines-python/train/pipeline.py 
     --model_name=$(model_name) --build_number=$(Build.BuildNumber) --image_name=aml-accelerator-img --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline_alex.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1 --path=$(Build.SourcesDirectory)'
 
-- task: AzureCLI@1
-  displayName: 'Master Pipeline-backup'
-  inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
-    scriptLocation: inlineScript
-    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
-    ./pipelines-python/train/pipeline.py --aml_compute_target $(aml_compute_target) 
-    --model_name $(model_name) --build_number $(Build.BuildNumber) --image_name $(image_name) --dataset $(dataset) --dataset_mountpath $(dataset_mountpath) --runconfig $(runconfig) --path $(Build.SourcesDirectory)'
-
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:

@@ -60,12 +60,10 @@ print("train_output PipelineData object created")
 
 print('--------------------------')
 print(args.runconfig)
-#runconfig = os.path.join(args.path, 'args.runconfig')
-#print(runconfig)
-
-#runconfig = RunConfiguration.load(args.path,args.runconfig)
 runconfig = RunConfiguration.load(args.runconfig)
-    
+print('--------------------------')
+
+print("setup dataset")    
 input_ds = Dataset.get_by_name(ws, args.dataset)
 training_data = input_ds.as_named_input('training_dataset').as_mount(path_on_compute=args.dataset_mountpath)
 
@@ -82,7 +80,7 @@ steps = [train_step]
 
 pipeline = Pipeline(workspace=ws, steps=steps)
 pipeline.validate()
-
+print("pipeline validation complete")
 #pipeline_run = Experiment(ws, 'train-pipe').submit(pipeline)
 #pipeline_run.wait_for_completion()
 

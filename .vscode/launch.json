@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Pipeline",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "/Users/azeltov/git/aml-acceleration-template/pipelines-python/train/pipeline.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": ["--model_name=aml-accelerator", "--build_number=1", "--image_name=aml-accelerator-img", "--dataset=german-credit-dataset", "--dataset_mountpath=/data", "--runconfig=/Users/azeltov/git/aml-acceleration-template/pipelines-python/train/pipeline_alex.runconfig", "--source_directory=/Users/azeltov/git/aml-acceleration-template/src/model1",  "--path=${env:path}"]

@@ -11,9 +11,9 @@ variables:
   aml_compute_target: 'cpucluster'
   model_name: 'aml-accelerator'
   image_name: 'aml-accelerator-image'
-  dataset: 'german-credit-filedataset'
+  dataset: 'german-credit-dataset'
   dataset_mountpath: '/data'
-  runconfig: 'pipeline.runconfig'
+
   
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'aml_accelarator_svc_conn'
@@ -57,6 +57,14 @@ steps:
 
 - task: AzureCLI@1
   displayName: 'Master Pipeline'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptLocation: inlineScript
+    inlineScript: 'python  /Users/azeltov/git/aml-acceleration-template/pipelines-python/train/pipeline.py 
+    --model_name=$(model_name) --build_number=$(Build.BuildNumber) --image_name=aml-accelerator-img --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline_alex.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1 --path=$(Build.SourcesDirectory)'
+
+- task: AzureCLI@1
+  displayName: 'Master Pipeline-backup'
   inputs:
     azureSubscription: '$(azureServiceConnectionId)'
     scriptLocation: inlineScript

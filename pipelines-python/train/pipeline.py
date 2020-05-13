@@ -84,8 +84,8 @@ steps = [train_step]
 pipeline = Pipeline(workspace=ws, steps=steps)
 pipeline.validate()
 
-pipeline_run = Experiment(ws, 'train-pipe').submit(pipeline)
-pipeline_run.wait_for_completion()
+#pipeline_run = Experiment(ws, 'train-pipe').submit(pipeline)
+#pipeline_run.wait_for_completion()
 
-#published_pipeline = pipeline.publish(pipeline_name)
-#print("Published pipeline id: ", published_pipeline.id)
+published_pipeline = pipeline.publish(pipeline_name)
+print("Published pipeline id: ", published_pipeline.id)

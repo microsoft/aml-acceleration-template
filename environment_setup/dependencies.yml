@@ -12,8 +12,8 @@ dependencies:
 
 - pip:
   # Azure Machine Learning specific dependencies (do not change!)
-  - azureml-defaults
-  #- azureml-sdk
+  #- azureml-defaults
+  - azureml-sdk
   - azure-cli
   # Replace those with your own dependencies (either from your Conda env or requirements.txt)
   - numpy==1.16.2

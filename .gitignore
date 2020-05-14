@@ -140,3 +140,6 @@ dmypy.json
 
 # Vscode
 .vscode/
+
+# Debug
+local_debug.txt

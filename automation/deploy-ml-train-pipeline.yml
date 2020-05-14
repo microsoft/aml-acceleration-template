@@ -13,7 +13,6 @@ variables:
   image_name: 'aml-accelerator-image'
   dataset: 'german-credit-dataset'
   dataset_mountpath: '/data'
-
   
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'aml_accelarator_svc_conn'

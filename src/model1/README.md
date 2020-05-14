@@ -58,7 +58,7 @@ az ml service delete --name test-deploy
 
 Deploy model to Azure Container Instances (ACI):
 ```
-az ml model deploy -n test-deploy-aci -m demo-model:1 --ic amlconfig/inference-config.yml --dc amlconfig/deployment-config-aci.yml --overwrite
+az ml model deploy -n test-deploy-aci -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
 ```
 
 Delete ACI deployed model:
@@ -70,7 +70,7 @@ az ml service delete --name test-deploy-aci
 
 Deploy model to Azure Kubernetes Service (AKS):
 ```
-az ml model deploy -n test-deploy-aks --ct aks-cluster -m demo-model:1 --ic amlconfig/inference-config.yml --dc amlconfig/deployment-config-aks.yml --overwrite
+az ml model deploy -n test-deploy-aks --ct aks-cluster -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aks.yml --overwrite
 ```
 
 Delete AKS deployed model:

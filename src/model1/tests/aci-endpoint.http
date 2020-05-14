@@ -1,9 +1,9 @@
 
 # Open this file in vscode and use it with the rest-client plugin
 
-POST http://url-to-your-aci-endpoint/score HTTP/1.1
+POST http://d42afe74-eb70-4dc0-adb9-9466b9c751af.westeurope.azurecontainer.io/score HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer your-api-key-goes-here
+Authorization: Bearer kIdQZYqTw7z0C3St2RZQi9MrXm4rjhs1
 
 {
     "data": [{

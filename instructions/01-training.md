@@ -44,6 +44,9 @@
 
 ## Running training locally
 
+This is the target architecture we'll use for this section:
+![alt text](media/01-local_training.png "Local Training Architecture")
+
 1. Adapt local runconfig for local training
     * Open [`aml_config/train-local.runconfig`](../src/model1/aml_config/train-local.runconfig) in your editor
     * Update the `script` parameter to point to your entry script (default is `train.py`)
@@ -70,6 +73,9 @@
     * Your training run will show up under `Experiments` in the UI
 
 ## Running training on Azure Machine Learning Compute
+
+This is the target architecture we'll use for this section:
+![alt text](media/01-remote_training.png "Remote Training Architecture")
 
 1. Create Dataset in AML with data
     * *Option 1* - Using Azure Storage Explorer:

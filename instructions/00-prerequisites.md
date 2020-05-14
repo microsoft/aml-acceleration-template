@@ -6,6 +6,8 @@ This tutorial assumes that you have an Azure Machine Learning service provisione
 * Resource group name: `aml-demo`
 * Workspace edition: `Enterprise`
 
+![alt text](media/00-new_workspace.png "New Workspace")
+
 Depending on your preference, you can either work directly on your local laptop using Docker (Path 1), or remotely connect to a `Compute Instance` (Path 2). Both paths will work, but depending on your system restrictions (e.g., not full admin rights to your laptop), you might want to use Path 2.
 
 Both paths cover how to leverage Azure Machine Learning for performing demanding, long-running training and batch-scoring jobs in the cloud.
@@ -25,19 +27,16 @@ Some parts might already be fulfilled (editor, SSH keys), hence feel free to ski
 1. Execute training Python code on local laptop using `python` or startup script to make sure it is working properly
 
 1. Install Azure CLI
-
     * Follow the documentation [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) to install the Azure CLI.
     * macOs (using `brew`): `brew update && brew install azure-cli`
     * Windows: Download [installer](https://aka.ms/installazurecliwindows)
 
 1. Login to Azure CLI
-
     ```
     az login
     ```
 
 1. Install the [AZ ML CLI extension](https://docs.microsoft.com/en-us/azure/machine-learning/reference-azure-machine-learning-cli)
-
     ```
     az extension add -n azure-cli-ml
     ```
@@ -75,9 +74,10 @@ Some parts might already be fulfilled (editor, SSH keys), hence feel free to ski
     * Enable `SSH Access`
     * Paste your public key from `~/.ssh/id_rsa.pub` in `SSH public key`
     * Hit `Create`
+    ![alt text](media/00-create_ci.png "Create CI")
     * Wait until instance has been provisioned
     * Select `SSH` under Application URI and copy the `Login using local account` command
-
+    ![alt text](media/00-ssh_details.png "SSH Details")
     [![Create an AML Compute Instance - Click to watch!](https://img.youtube.com/vi/Q54irUdf-_s/0.jpg)](https://youtu.be/Q54irUdf-_s)
 
 1. Connect remotely to the Compute Instance
@@ -91,10 +91,14 @@ Some parts might already be fulfilled (editor, SSH keys), hence feel free to ski
 1. *Optional* - Mount default Fileshare from Azure Machine Learning to local laptop
     * Open the [Azure Portal](https://portal.azure.com)
     * Navigate to your Azure Machine Learning's `Resource Group`
-    * Select the Azure Machine Learning's `Storage Account` (named same as the Machine Learning service with some number, e.g., `amlworkspace12345`)
+    * Select the Azure Machine Learning's `Storage Account` (named same as the Machine Learning service with some number, e.g., `amldemo12345678`)
     * Select `File shares`
     * Search for prefix `code` and select the matching file share
+    ![alt text](media/00-storage_account.png "Storage Account")
     * Click `Connect`
     * Follow the instructions to mount the share under Windows, Linux or macOS
+    ![alt text](media/00-connect.png "Connect details")
 
-Now that you have your environmnet up and running, we can move to the [next section](01-training.md) and migrate your training code to Azure.
+    
+
+Now that you have your environment up and running, we can move to the [next section](01-training.md) and migrate your training code to Azure.

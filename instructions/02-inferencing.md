@@ -15,8 +15,7 @@
     ```
 
 1. Test if the model works
-    * `POST` a sample request to your local endpoint using Postman, curl, etc.
-    * TODO: More guidance needed?
+    * To test the model, `POST` a sample request to your local endpoint using a tool of you choice
     * The model used in the template can be accessed using the following syntax:
     ```
     POST http://localhost:32000/score HTTP/1.1
@@ -38,7 +37,10 @@
         ]
     }
     ```
-    * Once it is working, you can delete the locally deployed service
+    * Test using VSCode
+      * Install the [REST Client extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) for VSCode
+      * Open [`local-endpoint.http`](../src/model1/tests/local-endpoint.http) in VSCode and click `Send Request`
+    * Once it is working, you can delete the locally deployed service:
     ```
     az ml service delete --name test-deploy
     ```
@@ -46,9 +48,21 @@
 1. Deploy model to ACI for testing the model in Azure
     * Finally, you can test deploying the model to ACI
     ```
-    az ml model deploy -n test-deploy-aci -m demo-model:1 --ic amlconfig/inference-config.yml --dc amlconfig/deployment-config-aci.yml --overwrite
+    az ml model deploy -n test-deploy-aci -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
     ```
-    * TODO: Add example how to test it
+    * Test using VSCode
+      * In the AML Studio UI, goto `Endpoints -> test-deploy-aci -> Consume` and note the `REST endpoint` and `Primary key`
+      * Install the [REST Client extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) for VSCode
+      * Open [`aci-endpoint.http`](../src/model1/tests/aci-endpoint.http) in VSCode, update your `POST URL` and `Authorization key`:
+      ```
+      POST http://d42afe74-eb70-4dc0-adb9-xxxxxxxxx.westeurope.azurecontainer.io/score HTTP/1.1
+      Content-Type: application/json
+      Authorization: Bearer xxxxxxxxxxxxxx
+      ```
+    * You can delete the deployment via:
+    ```
+    az ml service delete --name test-deploy-aci
+    ```
 
 1. Deploy model to AKS
     * TODO write up fully

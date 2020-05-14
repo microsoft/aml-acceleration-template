@@ -59,7 +59,7 @@ steps:
     azureSubscription: '$(azureServiceConnectionId)'
     scriptLocation: inlineScript
     inlineScript: 'python  $(Build.SourcesDirectory)/pipelines-python/train/pipeline.py 
-    --model_name=$(model_name) --build_number=$(Build.BuildNumber) --image_name=aml-accelerator-img --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline_alex.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1 --path=$(Build.SourcesDirectory)'
+    --model_name=$(model_name) --build_number=$(Build.BuildNumber) --image_name=aml-accelerator-img --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1 --path=$(Build.SourcesDirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'

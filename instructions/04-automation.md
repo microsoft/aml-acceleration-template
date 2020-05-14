@@ -41,7 +41,11 @@
    b. Subscription: Select the Azure subscription to use
    
    c. Resource Group: This value should match the value you provided in the `azure-pipelines.yml` file
-   
+
+### Create/Verify Dataset in AML 
+
+1. Follow instruction on [Create Dataset in AML from Training Page](https://github.com/microsoft/aml-acceleration-template/blob/master/instructions/01-training.md)
+
 ### Setup Build Pipeline
 
 1. From left navigation select **Pipelines, Builds** and then select **New pipeline**

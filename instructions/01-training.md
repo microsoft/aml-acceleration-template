@@ -72,22 +72,21 @@
 ## Running training on Azure Machine Learning Compute
 
 1. Create Dataset in AML with data
-    * TODO: We need to add more details on this
-    * TODO: New container or use existing default workspace container?
-    * *Option 1* - Using CLI:
-        * Execute the following commands in the terminal:
-        ```
-        az storage account keys list -g <your-resource-group> -n <storage-account-name>
-        az storage container create -n <container-name> --account-name <storage-account-name>
-        az storage blob upload -f <file_name.csv> -c <container-name> -n file_name.csv --account-name <storage-account-name>
-        ```
-    * *Option 2* - Using Azure Storage Explorer:
+    * *Option 1* - Using Azure Storage Explorer:
         * Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
         * Navigate into the correct subscription, then select the `Storage Account` that belongs to the AML workspace (should be named similar to the workspace with some random number), then select `Blob Containers` and find the container named `azureml-blobstore-...`
         * In this container, create a new folder for your dataset, you can name it `training_data`
         ![alt text](media/01-create_new_folder.png "Create new folder")       
         * Upload your data to that new folder
         * **Note:** For production, our data will obviously come from a separate data source, e.g., an Azure Data Lake
+    * *Option 2* - Using CLI:
+        * Execute the following commands in the terminal:
+        ```
+        az storage account keys list -g <your-resource-group> -n <storage-account-name>
+        az storage container create -n <container-name> --account-name <storage-account-name>
+        az storage blob upload -f <file_name.csv> -c <container-name> -n file_name.csv --account-name <storage-account-name>
+        ```
+        * In this case you need to register the container as new Datastore in AML, then create the dataset afterwards
     * In the Azure ML UI, register this folder as a new `File Dataset` under `Datasets`, click `+ Create dataset`, then select `From datastore` and follow through the dialog
     ![alt text](media/01-create_dataset.png "Create new dataset")
     * Lastly select the default datastore where we uploaded the data and select the path on the datastore, e.g., `training_data`

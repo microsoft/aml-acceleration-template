@@ -51,9 +51,7 @@ steps:
   inputs:
     azureSubscription: '$(azureServiceConnectionId)'
     scriptLocation: inlineScript
-    inlineScript: 'az ml run submit-script -d ./environment_setup/dependencies.yml 
-    ./environment_setup/create_aml_cluster.py --aml_compute_target $(aml_compute_target) 
-    --path $(Build.SourcesDirectory)'
+    inlineScript: 'az ml computetarget create amlcompute -n $(aml_compute_target) --min-nodes 1 --max-nodes 1 -s STANDARD_D3_V2'
 
 - task: AzureCLI@1
   displayName: 'Master Pipeline'

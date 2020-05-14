@@ -29,8 +29,8 @@ steps:
   displayName: 'Install Requirements'
   inputs:
     targetType: filePath
-    filePath: 'environment_setup/install_requirements.sh'
-    workingDirectory: 'environment_setup'
+    filePath: 'automation/install_requirements.sh'
+    workingDirectory: 'automation'
 
 - task: AzureCLI@1
   displayName: 'Install the CLI'

@@ -21,7 +21,7 @@
 
 ### Update the build YAML file
 
-1. Select and open the `azure-pipelines.yml` file
+1. Select and open the `automation/deploy-ml-train-pipeline.yml` file
 
 2. Select **Edit** and update the following variables: `resourcegroup`, and `workspace`. 
 
@@ -40,7 +40,7 @@
    
    b. Subscription: Select the Azure subscription to use
    
-   c. Resource Group: This value should match the value you provided in the `azure-pipelines.yml` file
+   c. Resource Group: This value should match the value you provided in the `automation/deploy-ml-train-pipeline.yml` file
 
 ### Create/Verify Dataset in AML 
 

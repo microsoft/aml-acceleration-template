@@ -26,6 +26,11 @@ The `train` pipeline file accepts command line arguments for creating the pipeli
 | `--source_directory`  | Source directory for the training code | 
 
 
+## `train-notebook` pipeline
+
+The train notebook pipeline will create pipeline that executes a Jupyter Notebook using [`azureml.contrib.notebook.NotebookRunnerStep`](https://docs.microsoft.com/en-us/python/api/azureml-contrib-notebook/azureml.contrib.notebook.notebookrunnerstep?view=azure-ml-py)
+
+
 ## `batch-inference` pipeline
 
 | ENV variable | Default | Description |

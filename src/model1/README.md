@@ -13,7 +13,7 @@ This connects the model folder to the workspace in AML.
 
 ## Training
 
-Train locally with Python (without AML):
+Train locally with Python (without using AML):
 ```
 python train.py --data-path ../../sample-data/
 ```
@@ -22,18 +22,21 @@ Train on local Docker container, but log metrics to AML:
 ```
 az ml run submit-script -c train-local -e aml-poc-local
 ```
+In this case `-c` refers to the `--run-configuration-name` (which points to `aml_config/<run-configuration-name>.runconfig`) and `-e` refers to the `--experiment-name`.
 
-Train using AML on AML Compute Cluster:
+Train using AML on an AML Compute Cluster:
 ```
-az ml run submit-script -c train-amlcompute -e aml-poc-amlcompute
+az ml run submit-script -c train-amlcompute -e aml-poc-amlcompute -t run.json
 ```
+The `-t` stands for `--output-metadata-file` and is used to generate a file that contains metadata about the run (we can use it to easily register the model from it in the next step).
 
 ## Model management
 
-Register model to model registry in AML (from local path):
+Register model to model store in AML:
 ```
-az ml model register -n demo-model --asset-path outputs/model.pkl
+az ml model register -n demo-model --asset-path outputs/model.pkl -f run.json
 ```
+Here `-n` stands for `--name`, under which the model will be registered. `--asset-path` points to the model's file location within the run itself (see `Outputs + logs` tab in UI). Lastly, `-f` stands for `--run-metadata-file` which is used to load the file created prior for referencing the run from which we want to register the model from.
 
 Get latest model version:
 ```

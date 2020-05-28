@@ -69,6 +69,7 @@ This is the target architecture we'll use for this section:
     ```
     az ml run submit-script -c train-local -e aml-poc-local
     ```
+    * **Details:** In this case `-c` refers to the `--run-configuration-name` (which points to `aml_config/<run-configuration-name>.runconfig`) and `-e` refers to the `--experiment-name`.
     * If it runs through, perfect - if not, follow the error message and adapt data path, conda env, etc. until it works
     * Your training run will show up under `Experiments` in the UI
 
@@ -136,6 +137,7 @@ This is the target architecture we'll use for this section:
     ```
     az ml run submit-script -c train-amlcompute -e aml-poc-compute -t run.json
     ```
+    * **Details:** The `-t` stands for `--output-metadata-file` and is used to generate a file that contains metadata about the run (we can use it to easily register the model from it in the next step).
     * Your training run will show up under `Experiments` in the UI
 
 ## Model registration
@@ -146,5 +148,6 @@ This is the target architecture we'll use for this section:
     az ml model register -n demo-model --asset-path outputs/model.pkl -f run.json \
       --tag key1=value1 --tag key2=value2 --property prop1=value1 --property prop2=value2
     ```
+    * **Details:** Here `-n` stands for `--name`, under which the model will be registered. `--asset-path` points to the model's file location within the run itself (see `Outputs + logs` tab in UI). Lastly, `-f` stands for `--run-metadata-file` which is used to load the file created prior for referencing the run from which we want to register the model from.
 
 Great, you have now trained your Machine Learning on Azure using the power of the cloud. Let's move to the [next section](02-inferencing.md) where we look into moving the inferencing code to Azure.

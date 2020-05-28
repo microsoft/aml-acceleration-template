@@ -20,7 +20,7 @@ parser.add_argument("--runconfig", type=str, help="runconfig", dest="runconfig",
 parser.add_argument("--source_directory", type=str, help="source_directory", dest="source_directory", required=True)
 args = parser.parse_args()
 
-print(args.args)
+print(args)
 
 print("Argument source_directory %s" % args.source_directory)
 print("Argument pipeline_name: %s" % args.pipeline_name)

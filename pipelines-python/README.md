@@ -3,11 +3,10 @@
 From within the directory of each pipeline, you can run it via:
 
 ```
-python pipeline.py
+python pipeline.py --pipeline_name training_pipeline --dataset german-credit-dataset --dataset_mountpath /data --runconfig pipeline.runconfig --source_directory ../../src/model1/
 ```
 
 The pipelines have different parameters which can be defined via environment variables or script arguments.
-
 
 ## `train` pipeline
 

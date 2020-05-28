@@ -17,11 +17,9 @@ The `train` pipeline file accepts command line arguments for creating the pipeli
 | Argument              | Description |
 |:--------------------  | ------------|
 | `--model_name`        | The name of the model to be registered |
-| `--build_number`      | |
-| `--image_name`        | |
-| `--path`              | |
+| `--build_number`      | (Optional) The build number |
 | `--dataset`           | References the dataset in the AML workspace that should be mounted for training | 
-| `--dataset_mountpath` | Path on the AML Compute Cluster where the dataset should be mounted to. |
+| `--dataset_mountpath` | Path on the AML Compute Cluster where the dataset should be mounted to |
 | `--runconfig`         | Runconfig that configures the training |
 | `--source_directory`  | Source directory for the training code | 
 

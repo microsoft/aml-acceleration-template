@@ -5,17 +5,15 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  resourcegroup: 'mlops-quickstart'
-  workspace: 'mlops-quickstart'
-  experiment: 'aml-accelerator-exp'
+  resourcegroup: 'aml-demo'
+  workspace: 'aml-demo'
   aml_compute_target: 'cpu-cluster'
-  model_name: 'aml-accelerator'
-  image_name: 'aml-accelerator-image'
+  pipeline_name: 'training-pipeline'
   dataset: 'german-credit-dataset'
   dataset_mountpath: '/data'
   
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: 'aml_accelarator_svc_conn'
+  azure_service_connection_name: 'aml_accelarator_svc_conn'
 
 steps:
 
@@ -31,46 +29,38 @@ steps:
     filePath: 'automation/install_requirements.sh'
     workingDirectory: 'automation'
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Install the CLI'
   inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
+    azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript
-    inlineScript: 'az extension add -n azure-cli-ml'
+    scriptType: bash
+    inlineScript: |
+      az extension add -n azure-cli-ml
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Attach folder to workspace'
   inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
+    azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript
-    inlineScript: 'az ml folder attach -e $(experiment) -w $(workspace) -g $(resourcegroup) --path $(Build.SourcesDirectory)'
+    scriptType: bash
+    inlineScript: |
+      az ml folder attach -w $(workspace) -g $(resourcegroup)
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Get or create AML Compute Target'
   inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
+    azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript
-    inlineScript: 'az ml computetarget create amlcompute -n $(aml_compute_target) --min-nodes 1 --max-nodes 1 -s STANDARD_D3_V2'
+    scriptType: bash
+    inlineScript: |
+      az ml computetarget create amlcompute -n $(aml_compute_target) --min-nodes 0 --max-nodes 1 -s STANDARD_D3_V2
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Master Pipeline'
   inputs:
-    azureSubscription: '$(azureServiceConnectionId)'
+    azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript
-    inlineScript: 'python  $(Build.SourcesDirectory)/pipelines-python/train/pipeline.py 
-    --model_name=$(model_name) --build_number=$(Build.BuildNumber) --image_name=aml-accelerator-img --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1 --path=$(Build.SourcesDirectory)'
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    Contents: '**'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: $(model_name)'
-  inputs:
-    ArtifactName: '$(model_name)'
-    publishLocation: 'container'
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    TargetPath: '$(Build.ArtifactStagingDirectory)'
+    scriptType: bash
+    inlineScript: |
+      python pipelines-python/train/pipeline.py --pipeline_name=$(pipeline_name) --build_number=$(Build.BuildNumber) --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1

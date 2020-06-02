@@ -76,6 +76,7 @@
         ]
     }
     ```
+    * You can access the automatically generated Swagger definition at `http://localhost:32000/swagger.json`
     * Once it is working, you can delete the locally deployed service:
     ```
     az ml service delete --name test-deploy

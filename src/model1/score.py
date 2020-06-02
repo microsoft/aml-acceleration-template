@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import joblib
+from inference_schema.schema_decorators import input_schema, output_schema
+from inference_schema.parameter_types.standard_py_parameter_type import StandardPythonParameterType
 
 def init():
     global model
@@ -21,11 +23,26 @@ def init():
     # Replace this line with your model loading code
     model = joblib.load(model_path)
 
-def run(raw_data):
+# Define some sample data for automatic generation of swagger interface
+input_sample = [{
+    "Age": 20,
+    "Sex": "male",
+    "Job": 0,
+    "Housing": "own",
+    "Saving accounts": "little",
+    "Checking account": "little",
+    "Credit amount": 100,
+    "Duration": 48,
+    "Purpose": "radio/TV"
+  }]
+output_sample = [[0.7, 0.3]]
+
+# This will automatically unmarshall the data parameter in the HTTP request
+@input_schema('data', StandardPythonParameterType(input_sample))
+@output_schema(StandardPythonParameterType(output_sample))
+def run(data):
     try:
-        # Replace this code with your inferencing code
-        data = json.loads(raw_data)['data']
-        input_df = pd.DataFrame.from_dict(data)
+        input_df = pd.DataFrame(data)
         proba = model.predict_proba(input_df)
         
         result = {"predict_proba": proba.tolist()}

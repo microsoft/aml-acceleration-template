@@ -2,19 +2,18 @@ import os
 import argparse
 import azureml.core
 from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfiguration
-from azureml.core.compute import AmlCompute
-from azureml.core.compute import ComputeTarget
-from azureml.pipeline.core import Pipeline, PipelineData
-from azureml.pipeline.steps import PythonScriptStep
 from azureml.core.authentication import AzureCliAuthentication
+from azureml.core.compute import AmlCompute, ComputeTarget
+from azureml.pipeline.core import Pipeline, PipelineData, PipelineParameter
+from azureml.pipeline.steps import PythonScriptStep
+from azureml.data.dataset_consumption_config import DatasetConsumptionConfig
 
 print("Azure ML SDK version:", azureml.core.VERSION)
 
 parser = argparse.ArgumentParser("deploy_training_pipeline")
 parser.add_argument("--pipeline_name", type=str, help="Name of the pipeline that will be deployed", dest="pipeline_name", required=True)
 parser.add_argument("--build_number", type=str, help="Build number", dest="build_number", required=False)
-parser.add_argument("--dataset", type=str, help="Dataset name", dest="dataset", required=True)
-parser.add_argument("--dataset_mountpath", type=str, help="Dataset mount path on AML Compute Cluster", dest="dataset_mountpath", required=True)
+parser.add_argument("--dataset", type=str, help="Default dataset, referenced by name", dest="dataset", required=True)
 parser.add_argument("--runconfig", type=str, help="Path to runconfig for pipeline", dest="runconfig", required=True)
 parser.add_argument("--source_directory", type=str, help="Path to model training code", dest="source_directory", required=True)
 args = parser.parse_args()
@@ -29,15 +28,18 @@ print('Loading runconfig for pipeline')
 runconfig = RunConfiguration.load(args.runconfig)
 
 print('Loading dataset')    
-input_ds = Dataset.get_by_name(ws, args.dataset)
-training_data = input_ds.as_named_input('training_dataset').as_mount(path_on_compute=args.dataset_mountpath)
+training_dataset = Dataset.get_by_name(ws, args.dataset)
+
+# Parametrize dataset input to the pipeline
+training_dataset_parameter = PipelineParameter(name="training_dataset", default_value=training_dataset)
+training_dataset_consumption = DatasetConsumptionConfig("training_dataset", training_dataset_parameter).as_mount()
 
 train_step = PythonScriptStep(name="train-step",
-                        source_directory=args.source_directory,
                         runconfig=runconfig,
-                        inputs=[training_data],
+                        source_directory=args.source_directory,
                         script_name=runconfig.script,
-                        arguments=runconfig.arguments,
+                        arguments=['--data-path', training_dataset_consumption],
+                        inputs=[training_dataset_consumption],
                         allow_reuse=False)
 
 steps = [train_step]
@@ -48,7 +50,9 @@ pipeline.validate()
 
 print('Publishing pipeline')
 published_pipeline = pipeline.publish(args.pipeline_name)
-print(f'Published pipeline id: {published_pipeline.id}')
+
+# Output pipeline_id in specified format which will convert it to a variable in Azure DevOps
+print(f'##vso[task.setvariable variable=pipeline_id]{published_pipeline.id}')
 
 #pipeline_run = Experiment(ws, 'training-pipe').submit(pipeline)
 #pipeline_run.wait_for_completion()

@@ -10,8 +10,8 @@ variables:
   aml_compute_target: 'cpu-cluster'
   pipeline_name: 'training-pipeline'
   dataset: 'german-credit-dataset'
-  dataset_mountpath: '/data'
-  
+  dataset_test: 'german-credit-ci-test' # Dataset used for testing the training pipeline
+
   # Azure Resource Manager connection created during pipeline creation
   azure_service_connection_name: 'aml_accelarator_svc_conn'
 
@@ -20,14 +20,11 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.6'
-    architecture: 'x64'   
 
 - task: Bash@3
   displayName: 'Install Requirements'
   inputs:
-    targetType: filePath
-    filePath: 'automation/install_requirements.sh'
-    workingDirectory: 'automation'
+    filePath: automation/install_requirements.sh
 
 - task: AzureCLI@2
   displayName: 'Install the CLI'
@@ -48,7 +45,7 @@ steps:
       az ml folder attach -w $(workspace) -g $(resourcegroup)
 
 - task: AzureCLI@2
-  displayName: 'Get or create AML Compute Target'
+  displayName: 'Create AML Compute Target'
   inputs:
     azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript
@@ -63,4 +60,20 @@ steps:
     scriptLocation: inlineScript
     scriptType: bash
     inlineScript: |
-      python pipelines-python/train/pipeline.py --pipeline_name=$(pipeline_name) --build_number=$(Build.BuildNumber) --dataset=$(dataset) --dataset_mountpath=$(dataset_mountpath) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1
+      python pipelines-python/train/pipeline.py --pipeline_name=$(pipeline_name) --build_number=$(Build.BuildNumber) --dataset=$(dataset) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1
+
+- task: AzureCLI@2
+  displayName: 'Test training pipeline functionally with small training data'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      export PIPELINE_ID=$(pipeline_id)
+      export DATASET_NAME=$(dataset_test)
+      pytest --junitxml=junit/test-results.xml
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results from pipeline test run'
+  inputs:
+    testRunTitle: 'Test results for published pipeline'

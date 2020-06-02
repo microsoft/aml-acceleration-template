@@ -1,5 +1,5 @@
 script: train.py
-arguments: [--data-path, /data]
+arguments: [] # This is set in pipeline.py
 target: cpu-cluster
 framework: Python
 communicator: None

@@ -22,11 +22,10 @@ def test_pipeline_functionally_works(pipeline):
     training_dataset = Dataset.get_by_name(ws, training_dataset_name)
 
     run = pipeline.submit(ws,
-        experiment_name="deployed-pipeline-acceptance-test",
+        experiment_name="training-pipeline-acceptance-test",
         pipeline_parameters={'training_dataset': training_dataset})
     run.wait_for_completion()
     assert run.status == "Completed"
     # Add more asserts
-
 
 # Add more tests, e.g., to make sure the produced model works functionally, etc.

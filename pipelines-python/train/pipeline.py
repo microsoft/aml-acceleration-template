@@ -2,7 +2,6 @@ import os
 import argparse
 import azureml.core
 from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfiguration
-#from azureml.core.authentication import AzureCliAuthentication
 from azureml.core.compute import AmlCompute, ComputeTarget
 from azureml.pipeline.core import Pipeline, PipelineData, PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
@@ -20,8 +19,7 @@ args = parser.parse_args()
 print(f'Arguments: {args}')
 
 print('Connecting to workspace')
-#cli_auth = AzureCliAuthentication()
-ws = Workspace.from_config() #auth=cli_auth)
+ws = Workspace.from_config()
 print(f'WS name: {ws.name}\nRegion: {ws.location}\nSubscription id: {ws.subscription_id}\nResource group: {ws.resource_group}')
 
 print('Loading runconfig for pipeline')

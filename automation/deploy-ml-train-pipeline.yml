@@ -16,8 +16,8 @@ variables:
   azure_service_connection_name: 'aml_accelarator_svc_conn'
 
 steps:
-
 - task: UsePythonVersion@0
+  displayName: 'Setting Python version'
   inputs:
     versionSpec: '3.6'
 
@@ -71,7 +71,7 @@ steps:
     inlineScript: |
       export PIPELINE_ID=$(pipeline_id)
       export DATASET_NAME=$(dataset_test)
-      pytest --junitxml=junit/test-results.xml
+      pytest --junitxml=junit/TEST-training-pipeline.xml
 
 - task: PublishTestResults@2
   displayName: 'Publish test results from pipeline test run'

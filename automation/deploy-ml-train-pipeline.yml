@@ -63,7 +63,7 @@ steps:
       python pipelines-python/train/pipeline.py --pipeline_name=$(pipeline_name) --build_number=$(Build.BuildNumber) --dataset=$(dataset) --runconfig=$(Build.SourcesDirectory)/pipelines-python/train/pipeline.runconfig --source_directory=$(Build.SourcesDirectory)/src/model1
 
 - task: AzureCLI@2
-  displayName: 'Test training pipeline functionally with small training data'
+  displayName: 'Test training pipeline functionally with small training dataset'
   inputs:
     azureSubscription: '$(azure_service_connection_name)'
     scriptLocation: inlineScript

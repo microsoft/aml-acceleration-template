@@ -34,10 +34,8 @@ This is still work in progress, and a few things are still beign worked on:
 
 | Area | Status |
 |------|--------|
-| YAML pipelines | Waiting for GA of `ParallelRunStep` for supporting Batch Inferencing |
+| YAML pipelines | Work in progress |
 | Example CI/CD pipelines for deploying ML Pipelines | Work in progress |
-| Parametrized ML Pipelines with variable Dataset input | Work in progress |
-| Example for easy local testing of `score.py` | Work in progress |
 
 ## Prerequisites & Getting Started
 

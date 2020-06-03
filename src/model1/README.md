@@ -47,6 +47,13 @@ az ml model list -n demo-model --query '[0].version'
 
 ### Deploy model to local Docker container
 
+If you want to test your `score.py` before deployment, you can run the integrated `pytest` via:
+
+```bash
+python -m pytest     # use this when you are running in conda
+pytest               # use this otherwise
+```
+
 Deploy model to local Docker container:
 ```
 az ml model deploy -n test-deploy -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --runtime python --compute-type local --port 32000 --overwrite

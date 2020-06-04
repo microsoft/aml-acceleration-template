@@ -1,0 +1,94 @@
+# This pipeline:
+# * trains the model on AML Compute and
+# * registers the model
+# * deploys the model to ACI and
+# * runs some basic tests against it
+
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  resourcegroup: 'aml-demo'
+  workspace: 'aml-demo'
+  aml_compute_target: 'cpu-cluster'  
+  model_path: 'src/model1/'
+  experiment: 'train-ci'
+  model_name: 'german-credit'
+  deployment_name: 'german-credit-api-aci'
+
+  # Azure Resource Manager connection created during pipeline creation
+  azure_service_connection_name: 'aml_accelarator_svc_conn'
+
+
+steps:
+- task: AzureCLI@2
+  displayName: 'Install the CLI'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az extension add -n azure-cli-ml
+
+- task: AzureCLI@2
+  displayName: 'Attach folder to workspace'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az ml folder attach -w $(workspace) -g $(resourcegroup)
+
+- task: AzureCLI@2
+  displayName: 'Create AML Compute Target'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az ml computetarget create amlcompute -n $(aml_compute_target) --min-nodes 0 --max-nodes 1 -s STANDARD_D3_V2
+
+- task: AzureCLI@2
+  displayName: 'Train model'
+  inputs:
+    azureSubscription: $(azure_service_connection_name)
+    workingDirectory: $(model_path)
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az ml run submit-script -c train-amlcompute --ct $(aml_compute_target) -e $(experiment) -t run.json
+
+# TODO: Add step before registration
+
+- task: AzureCLI@2
+  displayName: 'Register model'
+  inputs:
+    azureSubscription: $(azure_service_connection_name)
+    workingDirectory: $(model_path)
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az ml model register -n $(model_name) -f run.json --asset-path outputs/model.pkl -t model.json
+
+- task: AzureCLI@2
+  displayName: 'Deploy model to ACI'
+  inputs:
+    azureSubscription: $(azure_service_connection_name)
+    workingDirectory: $(model_path)
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      az ml model deploy -n $(deployment_name) -f model.json --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
+
+# TODO: Add tests
+
+
+
+az ml folder attach -w aml-demo-we -g aml-demo-we
+az ml run submit-script -c train-amlcompute --ct cpu-cluster -e train-ci -t run.json
+az ml model register -n german-credit -f run.json --asset-path outputs/model.pkl -t model.json
+az ml model deploy -n german-credit-api-aci -f model.json --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite

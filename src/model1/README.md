@@ -4,12 +4,12 @@ This document shares the commands on how to run training and real-time inferenci
 
 ## Attaching to workspace
 
-Attach the folder with the model code to the AML workspace (run this command from `src/model1/`):
+Attach the whole repo folder to the AML workspace (run this command from the repo's root folder):
 ```
 az ml folder attach -g aml-demo -w aml-demo
 ```
 
-This connects the model folder to the workspace in AML.
+This sets the default AML workspace for the whole repo.
 
 ## Training
 

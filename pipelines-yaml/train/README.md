@@ -1,6 +1,6 @@
 # Instructions
 
-Attach the folder with the pipeline to the AML workspace (run this command from this folder):
+Attach the whole repo to the AML workspace (run this command from the repo's root folder):
 ```
 az ml folder attach -g aml-demo -w aml-demo
 ```

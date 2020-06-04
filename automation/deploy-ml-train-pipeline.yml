@@ -75,7 +75,7 @@ steps:
     inlineScript: |
       export PIPELINE_ID=$(pipeline_id)
       export DATASET_NAME=$(dataset_test)
-      pytest --junitxml=junit/TEST-training-pipeline.xml
+      pytest --junitxml=junit/TEST-training-pipeline.xml pipelines-python/train/
 
 - task: PublishTestResults@2
   displayName: 'Publish test results from pipeline test run'

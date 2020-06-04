@@ -4,7 +4,6 @@
 # * deploys the model to ACI and
 # * runs some basic tests against it
 
-
 trigger:
 - master
 
@@ -23,8 +22,17 @@ variables:
   # Azure Resource Manager connection created during pipeline creation
   azure_service_connection_name: 'aml_accelarator_svc_conn'
 
-
 steps:
+- task: UsePythonVersion@0
+  displayName: 'Setting Python version'
+  inputs:
+    versionSpec: '3.6'
+
+- task: Bash@3
+  displayName: 'Install Requirements'
+  inputs:
+    filePath: automation/install_requirements.sh
+
 - task: AzureCLI@2
   displayName: 'Install the CLI'
   inputs:
@@ -82,13 +90,14 @@ steps:
     scriptLocation: inlineScript
     scriptType: bash
     inlineScript: |
-      az ml model deploy -n $(deployment_name) -f model.json --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
+      az ml model deploy -n $(deployment_name) -f model.json --ic aml_config/inference-config.yml --dc deployment/deployment-config-aci.yml --overwrite
 
-# TODO: Add tests
-
-
-
-az ml folder attach -w aml-demo-we -g aml-demo-we
-az ml run submit-script -c train-amlcompute --ct cpu-cluster -e train-ci -t run.json
-az ml model register -n german-credit -f run.json --asset-path outputs/model.pkl -t model.json
-az ml model deploy -n german-credit-api-aci -f model.json --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
+- task: AzureCLI@2
+  displayName: 'Test deployed webservice'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      export DEPLOYMENT_NAME=$(deployment_name)
+      pytest --junitxml=junit/TEST-deployed-model.xml src/model1/deployment

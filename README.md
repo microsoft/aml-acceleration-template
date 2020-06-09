@@ -10,7 +10,6 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 
 <img src="instructions/media/aml_logo.png" width="300px" />
 
-
 This repo features an Azure Machine Learning (AML) Acceleration template which enables you to quickly onboard your existing Machine Learning code to AML. The template enables a smooth ML development process between your local machine and the Azure Cloud. Furthermore, it includes simple examples for running your model's training and batch inferecing as [Machine Learning Pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines) for automation.
 
 If you want to follow a guided approach to use this repo, start with [migrating your first workload to AML](instructions/README.md) and walk through the individual sections.

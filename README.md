@@ -15,40 +15,23 @@ This repo features an Azure Machine Learning (AML) Acceleration template which e
 
 If you want to follow a guided approach to use this repo, start with [migrating your first workload to AML](instructions/README.md) and walk through the individual sections.
 
+## Getting Started
+
+We recommend you to start with [migrating your first workload to AML](instructions/README.md) as it covers all prerequisites and outlines a simple and proven step-by-step approach.
+
 ## Contents
 
 This repo follows a pre-defined structure for storing your model code, pipelines, etc.
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
-| `instructions\`   | A step-by-step guide on how to onboard your first workload to AML |
-| `sample-data\`   | Some small sample data used for the template example |
-| `src\`             | Model code and other required code assets |
-| `src\model1`     | A full end-to-end example for training, real-time and batch inferencing and automation |
-| `pipelines-yaml\`  | A set of [YAML-based ML pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/reference-pipeline-yaml)      |
-| `pipelines-py\`    | A set of Python-based ML pipelines             |
-
-## Status of the repo
-
-This is still work in progress, and a few things are still beign worked on:
-
-| Area | Status |
-|------|--------|
-| YAML pipelines | Waiting for GA of `ParallelRunStep` for supporting Batch Inferencing |
-| Example CI/CD pipelines for deploying ML Pipelines | Work in progress |
-| Parametrized ML Pipelines with variable Dataset input | Work in progress |
-| Example for easy local testing of `score.py` | Work in progress |
-
-## Prerequisites & Getting Started
-
-**Note:** A full list of prerequisites and introductions is documented [here](instructions/00-prerequisites.md). We recommend you to start with [migrating your first workload to AML](instructions/README.md) as it covers all prerequisites.
-
-This repo requires a few prerequisites to be installed:
-
-* Azure Machine Learning service provisioned - follow [this tutorial](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-manage-workspace#create-a-workspace)
-* Docker installed - see [here](https://docs.docker.com/get-docker/)
-* Azure CLI installed - see [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-* Azure Machine Learning CLI extension installed - see [here](https://docs.microsoft.com/en-us/azure/machine-learning/reference-azure-machine-learning-cli)
+| `automation` | Azure DevOps based CI/CD pipelines for MLOps |
+| `instructions\`| A step-by-step guide on how to onboard your first workload to AML |
+| `sample-data\` | Some small sample data used for the template example |
+| `src\` | Model(s) code and other required code assets |
+| `src\model1` | A full end-to-end example for training, real-time and batch inferencing and automation |
+| `pipelines-yaml\` | A set of [YAML-based ML pipelines](https://docs.microsoft.com/en-us/azure/machine-learning/reference-pipeline-yaml)      |
+| `pipelines-py\` | A set of Python-based ML pipelines |
 
 ## Authors
 

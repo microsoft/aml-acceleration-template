@@ -56,14 +56,14 @@ This is the target architecture we'll use for this section:
 
 1. Open `Terminal` in VSCode and run the training against the local instance
     * Select `View -> Terminal` to open the terminal
-    * Switch to the directory with the code:
-    ```
-    cd path/to/src/model1/
-    ```
-    * Attach the current folder to the AML workspace:
+    * From the root of the repo, attach to the AML workspace:
     ```
     az ml folder attach -g <your-resource-group> -w <your-workspace-name>
     # Using the defaults from before: az ml folder attach -g aml-demo -w aml-demo
+    ```
+    * Switch to our model directory:
+    ```
+    cd src/model1/
     ```
     * Submit the `train-local.runconfig` against the local host (either Compute Instance or your local Docker environment)
     ```

@@ -101,3 +101,8 @@ steps:
     inlineScript: |
       export DEPLOYMENT_NAME=$(deployment_name)
       pytest --junitxml=junit/TEST-deployed-model.xml src/model1/deployment
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testRunTitle: 'Test results for deployed model'

@@ -21,7 +21,7 @@ data:
   mydataset:
     dataLocation:
       dataset:
-        id: 575cd241-bbee-4305-94af-bcee90574623
+        id: 4e6f9fc7-8350-44a4-a91e-f7dab0a847ee
     mechanism: mount
     pathOnCompute: /data
     environmentVariableName: mydataset

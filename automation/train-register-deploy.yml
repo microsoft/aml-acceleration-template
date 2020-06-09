@@ -70,7 +70,7 @@ steps:
     inlineScript: |
       az ml run submit-script -c train-amlcompute --ct $(aml_compute_target) -e $(experiment) -t run.json
 
-# TODO: Add step before registration
+# TODO: Add evaluation step before registration
 
 - task: AzureCLI@2
   displayName: 'Register model'

@@ -40,6 +40,10 @@
                 return AMLResponse(response_body, 405)
             return AMLResponse("Bad Request", 500)
         ```
+    * You can test your `score.py` script locally using (make sure the file `outputs/model.pkl` exists):
+    ```
+    pytest tests/
+    ```
 
 ## Running real-time inferecing locally
 

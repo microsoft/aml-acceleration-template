@@ -1,17 +1,16 @@
-target: cpu-cluster
-framework: Python
-communicator: None
-nodeCount: 1
-environment:
-  environmentVariables:
-    EXAMPLE_ENV_VAR: EXAMPLE_VALUE
-  python:
-    userManagedDependencies: false
-    interpreterPath: python
-    condaDependenciesFile: ../../src/model1/aml_config/inference-conda.yml
-  docker:
-    enabled: true
-    baseImage: mcr.microsoft.com/azureml/base:intelmpi2018.3-ubuntu16.04
-    arguments: []
-mpi:
-    processCountPerNode: 1
+parallel_run_config:
+  input_format:
+  mini_batch_size: 1
+  error_threshold: 0
+  output_action: append_row
+  logging_level: INFO
+  compute_target_name: cpu-cluster
+  node_count: 1
+  process_count_per_node: 2
+  entry_script: score_batch.py
+  source_directory: ../../src/model1/
+  description:
+  run_invocation_timeout: 180
+  append_row_file_name: batch-predictions.txt
+  environment_name:
+  environment_dir_path: parallel_run_env

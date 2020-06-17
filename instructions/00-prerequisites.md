@@ -12,14 +12,14 @@ Depending on your preference, you can either work directly on your local laptop 
 
 Both paths cover how to leverage Azure Machine Learning for performing demanding, long-running training and batch-scoring jobs in the cloud.
 
-## Path 1 - Using Local Laptop
+## Path 1 - Using your Local Laptop
 
 Follow this path if:
 
 * You want to work fully locally on your laptop
 * You can fullfil all these prerequisites:
     * You have full admin rights on your laptop
-    * You have `docker` installed
+    * You have `docker` installed (see [here](https://docs.docker.com/get-docker/))
 * **Note:** This path does not support local testing using GPUs
 
 Some parts might already be fulfilled (editor, SSH keys), hence feel free to skip those steps.
@@ -41,12 +41,13 @@ Some parts might already be fulfilled (editor, SSH keys), hence feel free to ski
     az extension add -n azure-cli-ml
     ```
 
-## Path 2 - Using Compute Instance
+## Path 2 - Using a Compute Instance
 
 Follow this path if:
 
 * You want (or are required) to work with a cloud-hosted machine in the background
 * You do not have full admin rights on your laptop and have challenges installing, e.g., `docker`
+* Want the most proven way possible
 
 Some parts might already be fulfilled (editor, SSH keys), hence feel free to skip those steps.
 
@@ -98,7 +99,5 @@ Some parts might already be fulfilled (editor, SSH keys), hence feel free to ski
     * Click `Connect`
     * Follow the instructions to mount the share under Windows, Linux or macOS
     ![alt text](media/00-connect.png "Connect details")
-
-    
 
 Now that you have your environment up and running, we can move to the [next section](01-training.md) and migrate your training code to Azure.

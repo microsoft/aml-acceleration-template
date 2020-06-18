@@ -131,10 +131,11 @@ This is the target architecture we'll use for this section:
             ...
             pathOnCompute: /data # Where your data is mounted to
     ```
-    * If you want to use a GPU-based instance, you'll need to update the base image to include the `cude` drivers, e.g.:
+    * If you want to use a GPU-based instance, you'll need to update the base image to include the `cuda` drivers, e.g.:
     ```
     baseImage: mcr.microsoft.com/azureml/base-gpu:openmpi3.1.2-cuda10.1-cudnn7-ubuntu18.04
     ```
+    * All full list of pre-curated Docker images can be found [here](https://github.com/Azure/AzureML-Containers#featured-tags) - make sure your `cuda` version matches your library version
 
 1. Submit the training against the AML Compute Cluster
     * Submit the `train-amlcompute.runconfig` against the AML Compute Cluster

@@ -1,65 +1,61 @@
 import os
+import argparse
 import azureml.core
-from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfiguration, Model
-from azureml.core.compute import AmlCompute
-from azureml.pipeline.core import Pipeline, PipelineData
-
+from azureml.core import Workspace, Experiment, Datastore, Dataset, RunConfiguration
+from azureml.core.compute import AmlCompute, ComputeTarget
+from azureml.pipeline.core import Pipeline, PipelineData, PipelineParameter
+from azureml.pipeline.steps import ParallelRunStep, ParallelRunConfig
 from azureml.data.dataset_consumption_config import DatasetConsumptionConfig
-from azureml.contrib.pipeline.steps import ParallelRunConfig 
-from azureml.contrib.pipeline.steps import ParallelRunStep 
 
-dataset_name =  os.getenv('DATASET', 'german-credit-filedataset')
-source_directory = os.getenv('SOURCE_DIRECTORY', '../../src/model1/')
-runconfig = os.getenv('RUNCONFIG', 'pipeline.runconfig')
-model_name = os.getenv('MODEL_NAME', 'demo-model')
+print("Azure ML SDK version:", azureml.core.VERSION)
 
-print("SDK version:", azureml.core.VERSION)
+parser = argparse.ArgumentParser("deploy_batch_inferencing_pipeline")
+parser.add_argument("--pipeline_name", type=str, help="Name of the pipeline that will be deployed", dest="pipeline_name", required=True)
+parser.add_argument("--build_number", type=str, help="Build number", dest="build_number", required=False)
+parser.add_argument("--dataset", type=str, help="Default batch dataset, referenced by name", dest="dataset", required=True)
+parser.add_argument("--model_name", type=str, help="Model that should be used for batch inferencing", dest="model_name", required=True)
+parser.add_argument("--runconfig", type=str, help="Path to the parallel runconfig for pipeline", dest="runconfig", required=True)
+args = parser.parse_args()
+print(f'Arguments: {args}')
 
+print('Connecting to workspace')
 ws = Workspace.from_config()
-print(ws.name, ws.resource_group, ws.location, ws.subscription_id, sep = '\n')
+print(f'WS name: {ws.name}\nRegion: {ws.location}\nSubscription id: {ws.subscription_id}\nResource group: {ws.resource_group}')
+
+print('Loading parallel runconfig for pipeline')
+parallel_run_config = ParallelRunConfig.load_yaml(workspace=ws, path=args.runconfig)
+
+print('Loading default batch dataset')    
+batch_dataset = Dataset.get_by_name(ws, args.dataset)
+
+# Parametrize dataset input to the pipeline
+batch_dataset_parameter = PipelineParameter(name="batch_dataset", default_value=batch_dataset)
+batch_dataset_consumption = DatasetConsumptionConfig("batch_dataset", batch_dataset_parameter).as_mount()
 
 datastore = ws.get_default_datastore()
-
-model = Model(ws, name=model_name)
-
-input_ds = Dataset.get_by_name(ws, dataset_name)
-batch_data = DatasetConsumptionConfig("batch_dataset", input_ds, mode='mount')
-
 output_dir = PipelineData(name='batch_output', datastore=datastore)
-
-environment = RunConfiguration.load(runconfig).environment
-
-parallel_run_config = ParallelRunConfig(
-    source_directory=source_directory,
-    entry_script='score_batch.py',
-    mini_batch_size='1',
-    run_invocation_timeout=180, 
-    error_threshold=10,
-    output_action='append_row',
-    append_row_file_name='batch-predictions.txt',
-    environment=environment, 
-    process_count_per_node=1,
-    compute_target='cpu-cluster',
-    node_count=1
-)
 
 batch_step = ParallelRunStep(
     name="batch-inference-step",
     parallel_run_config=parallel_run_config,
-    inputs=[batch_data],
+    arguments=['--model_name', args.model_name],
+    inputs=[batch_dataset_consumption],
+    side_inputs=[],
     output=output_dir,
-    allow_reuse=False,
-    models=[model],
-    arguments=[]
+    allow_reuse=False
 )
 
 steps = [batch_step]
 
+print('Creating and validating pipeline')
 pipeline = Pipeline(workspace=ws, steps=steps)
 pipeline.validate()
 
-pipeline_run = Experiment(ws, 'batch-pipe').submit(pipeline)
-pipeline_run.wait_for_completion()
+print('Publishing pipeline')
+published_pipeline = pipeline.publish(args.pipeline_name)
 
-#published_pipeline = pipeline.publish(pipeline_name)
-#print("Published pipeline id: ", published_pipeline.id)
+# Output pipeline_id in specified format which will convert it to a variable in Azure DevOps
+print(f'##vso[task.setvariable variable=pipeline_id]{published_pipeline.id}')
+
+# pipeline_run = Experiment(ws, 'batch-inferencing-pipeline').submit(pipeline)
+# pipeline_run.wait_for_completion()

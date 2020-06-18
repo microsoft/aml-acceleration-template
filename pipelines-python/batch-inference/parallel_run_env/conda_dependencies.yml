@@ -1,4 +1,4 @@
-name: inference-env
+name: batch-scoring-env
 channels:
   - conda-forge
   - defaults
@@ -8,6 +8,7 @@ dependencies:
     # Azure Machine Learning specific dependencies (do not change!)
     - azureml-defaults
     - azureml-core
+    - azureml-dataprep[pandas,fuse] # Required for parallel batch scoring (ParallelRunStep)
     # Replace those with your own dependencies (either from your Conda env or requirements.txt)
     - numpy==1.16.2
     - scikit-learn==0.20.3

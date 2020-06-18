@@ -21,7 +21,7 @@ test_sample = json.dumps({
 
 ws = Workspace.from_config()
 
-def test_deployed_model():
+def test_deployed_model_service():
     service = Webservice(ws, deployment_name)
     assert service is not None
 

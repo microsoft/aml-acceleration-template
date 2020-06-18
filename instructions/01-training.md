@@ -113,7 +113,7 @@ This is the target architecture we'll use for this section:
     ![alt text](media/01-create_cluster.png "Create Compute Cluster")
 
 1. Adapt AML Compute runconfig
-    * Open [`aml_config/train-local.runconfig`](../src/model1/aml_config/train-amlcompute.runconfig) in your editor
+    * Open [`aml_config/train-amlcompute.runconfig`](../src/model1/aml_config/train-amlcompute.runconfig) in your editor
     * Update the `script` parameter to point to your entry script
     * Update the `arguments` parameter and point your data path parameter to `/data` and adapt other parameters
     * Update the `target` section and point it to the name of your newly created Compute cluster (default `cpu-cluster`)
@@ -131,6 +131,11 @@ This is the target architecture we'll use for this section:
             ...
             pathOnCompute: /data # Where your data is mounted to
     ```
+    * If you want to use a GPU-based instance, you'll need to update the base image to include the `cuda` drivers, e.g.:
+    ```
+    baseImage: mcr.microsoft.com/azureml/base-gpu:openmpi3.1.2-cuda10.1-cudnn7-ubuntu18.04
+    ```
+    * All full list of pre-curated Docker images can be found [here](https://github.com/Azure/AzureML-Containers#featured-tags) - make sure your `cuda` version matches your library version
 
 1. Submit the training against the AML Compute Cluster
     * Submit the `train-amlcompute.runconfig` against the AML Compute Cluster

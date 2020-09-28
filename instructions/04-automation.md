@@ -17,7 +17,7 @@ Next, we'll authenticate from Azure DevOps to AML, so that Azure DevOps can make
 1. From the left navigation select **Project settings** and then select **Service connections**
 1. Select **New service connection** and then select **Azure Resource Manager**
 1. Provide the following information in the `Add an Azure Resource Manager service connection` dialog box and then select **Ok**:
-   1. Connection name: `azure_service_connection_name`
+   1. Connection name: `aml_accelarator_svc_conn`
    1. Subscription: Select the Azure subscription you've used before
    1. Resource Group: The resource group you've used before, most likely `aml-demo`
 

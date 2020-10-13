@@ -91,7 +91,7 @@
 1. Deploy model to ACI (Azure Container Instances) for testing the model in Azure
     * Finally, you can test deploying the model to ACI:
     ```
-    az ml model deploy -n test-deploy-aci -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --overwrite
+    az ml model deploy -n test-deploy-aci -m demo-model:1 --ic aml_config/inference-config.yml --dc deployment/deployment-config-aci.yml --overwrite
     ```
     * Test using VSCode with `rest-client` (same as above)
       * In the AML Studio UI, goto `Endpoints -> test-deploy-aci -> Consume` and note the `REST endpoint` and `Primary key`
@@ -113,7 +113,7 @@
     ```
     * Finally, you can test deploying the model to AKS:
     ```
-    az ml model deploy -n test-deploy-aks --ct aks-cluster -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aks.yml --overwrite
+    az ml model deploy -n test-deploy-aks --ct aks-cluster -m demo-model:1 --ic aml_config/inference-config.yml --dc deployment/deployment-config-aks.yml --overwrite
     ```
     * Test using VSCode with `rest-client` (same as above)
       * In the AML Studio UI, goto `Endpoints -> test-deploy-aks -> Consume` and note the `REST endpoint` and `Primary key`

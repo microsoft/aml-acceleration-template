@@ -50,7 +50,7 @@
 1. Deploy model as a RESTful service to local host 
     * Deploy locally to Docker:
     ```
-    az ml model deploy -n test-deploy -m demo-model:1 --ic aml_config/inference-config.yml --dc aml_config/deployment-config-aci.yml --runtime python --compute-type local --port 32000 --overwrite
+    az ml model deploy -n test-deploy -m demo-model:1 --ic aml_config/inference-config.yml --dc deployment/deployment-config-aci.yml --runtime python --compute-type local --port 32000 --overwrite
     ```
     * The model is referenced by `model_name:model_version` (in this case `demo-model` with version `1`)
 

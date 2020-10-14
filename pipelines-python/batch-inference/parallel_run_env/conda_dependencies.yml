@@ -7,7 +7,7 @@ dependencies:
   - pip:
     # Azure Machine Learning specific dependencies (do not change!)
     - azureml-defaults
-    - azureml-core
+    - azureml-core>=1.13.0
     - azureml-dataprep[pandas,fuse] # Required for parallel batch scoring (ParallelRunStep)
     # Replace those with your own dependencies (either from your Conda env or requirements.txt)
     - numpy==1.16.2

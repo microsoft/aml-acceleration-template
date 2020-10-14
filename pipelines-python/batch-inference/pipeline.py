@@ -6,6 +6,7 @@ from azureml.core.compute import AmlCompute, ComputeTarget
 from azureml.pipeline.core import Pipeline, PipelineData, PipelineParameter
 from azureml.pipeline.steps import ParallelRunStep, ParallelRunConfig
 from azureml.data.dataset_consumption_config import DatasetConsumptionConfig
+from azureml.data import OutputFileDatasetConfig
 
 print("Azure ML SDK version:", azureml.core.VERSION)
 
@@ -28,12 +29,21 @@ parallel_run_config = ParallelRunConfig.load_yaml(workspace=ws, path=args.runcon
 print('Loading default batch dataset')    
 batch_dataset = Dataset.get_by_name(ws, args.dataset)
 
-# Parametrize dataset input to the pipeline
+# Parametrize dataset input and dataset output name (batch scoring result) to the pipeline
 batch_dataset_parameter = PipelineParameter(name="batch_dataset", default_value=batch_dataset)
 batch_dataset_consumption = DatasetConsumptionConfig("batch_dataset", batch_dataset_parameter).as_mount()
 
 datastore = ws.get_default_datastore()
-output_dir = PipelineData(name='batch_output', datastore=datastore)
+output_dataset_name = "batch_scoring_results"
+
+# Existing, GA-code - does not allow to specify the path on the datastore
+# output_dataset = PipelineData(name='batch_output', datastore=datastore).as_dataset()
+# output_dataset = output_dataset.register(name=output_dataset_name, create_new_version=True)
+
+# New code, not GA - does allow to specify the path on the datstore
+destination_on_datastore = (datastore, 'output_dataset_name/')
+output_dataset = OutputFileDatasetConfig(name='batch_results',
+                                         destination=destination_on_datastore).register_on_complete(name=output_dataset_name)
 
 batch_step = ParallelRunStep(
     name="batch-inference-step",
@@ -41,7 +51,7 @@ batch_step = ParallelRunStep(
     arguments=['--model_name', args.model_name],
     inputs=[batch_dataset_consumption],
     side_inputs=[],
-    output=output_dir,
+    output=output_dataset,
     allow_reuse=False
 )
 

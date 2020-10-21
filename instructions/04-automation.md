@@ -38,15 +38,17 @@ This pipeline is used to the automatically deploy the Python-based ML training p
     workspace: 'aml-demo'
     aml_compute_target: 'cpu-cluster'
     pipeline_name: 'training-pipeline'
+    pipeline_endpoint_name: 'training-pipeline-endpoint'
     dataset: 'german-credit-dataset'
     dataset_test: 'german-credit-ci-test' # Dataset used for testing the training pipeline
   ```
-1. Review the YAML file, this CI/CD pipeline has four key steps:
+1. Review the YAML file, this CI/CD pipeline has five key steps:
     * Attach folder to workspace
     * Create the AML Compute target
-    * Create pipeline for model training
+    * Create and publish pipeline for model training
     * Execute tests for running the training pipeline using a small training dataset (functional test)
     * Publish the test results
+    * Add published pipeline behind a Pipeline Endpoint, so that the URL stays the same
 1. Select `Save and run` to save run the pipeline.
 
 ### `Train, register, deploy` pipeline

@@ -91,4 +91,4 @@ steps:
     scriptLocation: inlineScript
     scriptType: bash
     inlineScript: |
-      python pipelines-python/train/publish_to_endpoint.py --pipeline_id=$(pipeline_id) --pipeline_endpoint=$(pipeline_endpoint_name)
+      python pipelines-python/train/publish_to_endpoint.py --pipeline_id=$(pipeline_id) --pipeline_endpoint_name=$(pipeline_endpoint_name)

@@ -9,6 +9,7 @@ print("Azure ML SDK version:", azureml.core.VERSION)
 parser = argparse.ArgumentParser("publish_to_pipeline_endpoint")
 parser.add_argument("--pipeline_id", type=str, help="Id of the published pipeline that should get added to the Pipeline Endpoint", required=True)
 parser.add_argument("--pipeline_endpoint_name", type=str, help="Name of the Pipeline Endpoint that the the pipeline should be added to", required=True)
+parser.add_argument("--pipeline_endpoint_description", type=str, help="Description for the Pipeline Endpoint", default="Pipeline Endpoint", required=False)
 args = parser.parse_args()
 print(f'Arguments: {args}')
 
@@ -16,14 +17,8 @@ print('Connecting to workspace')
 ws = Workspace.from_config()
 print(f'WS name: {ws.name}\nRegion: {ws.location}\nSubscription id: {ws.subscription_id}\nResource group: {ws.resource_group}')
 
-# Connect to the workspace
-ws = Workspace.from_config()
-print(f'WS name: {ws.name}')
-print(f'Region: {ws.location}')
-print(f'Subscription id: {ws.subscription_id}')
-print(f'Resource group: {ws.resource_group}')
-
 endpoint_name = args.pipeline_endpoint_name
+pipeline_description = args.pipeline_endpoint_description
 pipeline_id = args.pipeline_id
 published_pipeline = PublishedPipeline.get(workspace=ws, id=pipeline_id)
 
@@ -37,4 +32,4 @@ except Exception:
     pl_endpoint = PipelineEndpoint.publish(workspace=ws,
                                            name=endpoint_name,
                                            pipeline=published_pipeline,
-                                           description="New Training Pipeline Endpoint")
+                                           description=pipeline_description)

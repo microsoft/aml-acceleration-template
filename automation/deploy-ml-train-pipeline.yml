@@ -1,6 +1,7 @@
 # This pipeline:
-# * deploys the training ML pipeline and
-# * runs a small test training dataset through it for ensuring full functionality of the deployed ML pipeline
+# * Deploys the training ML pipeline as a published pipeline
+# * Runs a small test training dataset through it for ensuring full functionality of the deployed ML pipeline
+# * Publishes it as a new Pipeline Endpoint or adds it as default to an existing Pipeline Endpoint
 
 trigger:
 - master
@@ -13,6 +14,7 @@ variables:
   workspace: 'aml-demo'
   aml_compute_target: 'cpu-cluster'
   pipeline_name: 'training-pipeline'
+  pipeline_endpoint_name: 'training-pipeline-endpoint'
   dataset: 'german-credit-dataset'
   dataset_test: 'german-credit-ci-test' # Dataset used for testing the training pipeline
 
@@ -81,3 +83,12 @@ steps:
   displayName: 'Publish test results from pipeline test run'
   inputs:
     testRunTitle: 'Test results for published pipeline'
+
+- task: AzureCLI@2
+  displayName: 'Add pipeline to Pipeline Endpoint'
+  inputs:
+    azureSubscription: '$(azure_service_connection_name)'
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      python pipelines-python/train/publish_to_endpoint.py --pipeline_id=$(pipeline_id) --pipeline_endpoint_name=$(pipeline_endpoint_name)

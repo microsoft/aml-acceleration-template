@@ -22,7 +22,7 @@ The `train` pipeline deployment script accepts the following command line argume
 
 Example:
 ```
-python pipeline.py --pipeline_name training_pipeline --dataset german-credit-dataset --runconfig pipeline.runconfig --source_directory ../../src/model1/
+python pipeline.py --pipeline_name training_pipeline --dataset german-credit-dataset --runconfig pipeline.runconfig --source_directory ../../models/model1/
 ```
 
 The published pipeline can be called via its REST API, so it can be triggered on demand, when you wish to retrain. Furthermore, you can use an orchestrator of your choice to trigger them, e.g., you could directly trigger it from [Azure Data Factory](https://azure.microsoft.com/en-us/services/data-factory/) when new data got processed. You may follow [this tutorial](https://docs.microsoft.com/en-us/azure/data-factory/transform-data-machine-learning-service).

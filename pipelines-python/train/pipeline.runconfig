@@ -10,7 +10,7 @@ environment:
   python:
     userManagedDependencies: false
     interpreterPath: python
-    condaDependenciesFile: ../../src/model1/aml_config/train-conda.yml
+    condaDependenciesFile: ../../models/model1/aml_config/train-conda.yml
   docker:
     enabled: true
     baseImage: mcr.microsoft.com/azureml/base:intelmpi2018.3-ubuntu16.04

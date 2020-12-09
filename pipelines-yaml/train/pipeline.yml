@@ -10,7 +10,7 @@ pipeline:
     TrainingStep:
       type: PythonScriptStep
       name: training-step
-      source_directory: ../../src/model1/
+      source_directory: ../../models/model1/
       runconfig: runconfig.yml
       allow_reuse: true
       script_name: train.py # Adapt to your training script

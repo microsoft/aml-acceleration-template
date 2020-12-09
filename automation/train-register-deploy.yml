@@ -14,7 +14,7 @@ variables:
   resourcegroup: 'aml-demo'
   workspace: 'aml-demo'
   aml_compute_target: 'cpu-cluster'  
-  model_path: 'src/model1/'
+  model_path: 'models/model1/'
   experiment: 'train-ci'
   model_name: 'german-credit'
   deployment_name: 'german-credit-api-aci'
@@ -100,7 +100,7 @@ steps:
     scriptType: bash
     inlineScript: |
       export DEPLOYMENT_NAME=$(deployment_name)
-      pytest --junitxml=junit/TEST-deployed-model.xml src/model1/deployment
+      pytest --junitxml=junit/TEST-deployed-model.xml models/model1/deployment
 
 - task: PublishTestResults@2
   displayName: 'Publish test results'

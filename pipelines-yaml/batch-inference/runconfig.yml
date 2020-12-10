@@ -8,7 +8,7 @@ parallel_run_config:
   node_count: 1
   process_count_per_node: 2
   entry_script: score_batch.py
-  source_directory: ../../src/model1/
+  source_directory: ../../models/model1/
   description:
   run_invocation_timeout: 180
   append_row_file_name: batch-predictions.txt

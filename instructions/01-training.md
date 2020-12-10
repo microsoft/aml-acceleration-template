@@ -12,7 +12,7 @@
     ```
 
 1. Copy your Machine Learning code into the repository
-    * Copy your existing Machine Learning code to the [`src/model1/`](../src/model1/) directory
+    * Copy your existing Machine Learning code to the [`models/model1/`](../models/model1/) directory
     * If you already have a `train.py` or `score.py`, just rename the existing examples for later use as reference
     * If you are converting an existing `ipynb` notebook, you can easily convert it to a python script using these commands:
         ```
@@ -24,12 +24,12 @@
 1. Adapt Conda environment
     * *Case 1* - You are using `conda env`
         * If you do not have an existing Conda env yaml file, run `conda env export > temp.yml` from the correct Conda env
-        * Copy your existing Conda environmnent details into [`aml_config/train-conda.yml`](../src/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
+        * Copy your existing Conda environmnent details into [`aml_config/train-conda.yml`](../models/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
     * *Case 2* - You are using a `pip`
         * If you do not have an existing `requirements.txt`, run `pip freeze > requirements.txt`
-        * Copy your content from your `requirements.txt` into [`aml_config/train-conda.yml`](../src/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
+        * Copy your content from your `requirements.txt` into [`aml_config/train-conda.yml`](../models/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
     * *Case 3* - It's more complicated
-        * Make a good assumption what your dependencies are and put them into [`aml_config/train-conda.yml`](../src/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
+        * Make a good assumption what your dependencies are and put them into [`aml_config/train-conda.yml`](../models/model1/aml_config/train-conda.yml) (make sure to keep the `azureml-*` specific dependencies!)
 
 1. Update your training code to serialize your model
     * Update your training code to write out the model to an folder called `outputs/`
@@ -48,7 +48,7 @@ This is the target architecture we'll use for this section:
 ![alt text](media/01-local_training.png "Local Training Architecture")
 
 1. Adapt local runconfig for local training
-    * Open [`aml_config/train-local.runconfig`](../src/model1/aml_config/train-local.runconfig) in your editor
+    * Open [`aml_config/train-local.runconfig`](../models/model1/aml_config/train-local.runconfig) in your editor
     * Update the `script` parameter to point to your entry script (default is `train.py`)
     * Update the `arguments` parameter and point your data path parameter to `/data` and adapt other parameters
     * Under the `environment -> docker` section, change `arguments: [-v, /full/path/to/sample-data:/data]` to the full path to your data folder on your disk
@@ -63,7 +63,7 @@ This is the target architecture we'll use for this section:
     ```
     * Switch to our model directory:
     ```
-    cd src/model1/
+    cd models/model1/
     ```
     * Submit the `train-local.runconfig` against the local host (either Compute Instance or your local Docker environment)
     ```
@@ -113,7 +113,7 @@ This is the target architecture we'll use for this section:
     ![alt text](media/01-create_cluster.png "Create Compute Cluster")
 
 1. Adapt AML Compute runconfig
-    * Open [`aml_config/train-amlcompute.runconfig`](../src/model1/aml_config/train-amlcompute.runconfig) in your editor
+    * Open [`aml_config/train-amlcompute.runconfig`](../models/model1/aml_config/train-amlcompute.runconfig) in your editor
     * Update the `script` parameter to point to your entry script
     * Update the `arguments` parameter and point your data path parameter to `/data` and adapt other parameters
     * Update the `target` section and point it to the name of your newly created Compute cluster (default `cpu-cluster`)

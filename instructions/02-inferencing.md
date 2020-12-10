@@ -3,19 +3,19 @@
 ## Preparing the real-time inferencing code
 
 1. Adapt conda enviroment for inferencing
-    * Copy your dependencies from [`aml_config/train-conda.yml`](../src/model1/aml_config/train-conda.yml) to [`aml_config/inference-conda.yml`](../src/model1/aml_config/inference-conda.yml)
-    * If you have different dependencies for inferencing, you can adapt them in [`aml_config/inference-conda.yml`](../src/model1/aml_config/train-conda.yml)
+    * Copy your dependencies from [`aml_config/train-conda.yml`](../models/model1/aml_config/train-conda.yml) to [`aml_config/inference-conda.yml`](../models/model1/aml_config/inference-conda.yml)
+    * If you have different dependencies for inferencing, you can adapt them in [`aml_config/inference-conda.yml`](../models/model1/aml_config/train-conda.yml)
 
 1. Adapt existing `score.py`
-    * Open [`score.py`](../src/model1/score.py) and start updating the `init()` and `run()` methods following the instructions given in the file
+    * Open [`score.py`](../models/model1/score.py) and start updating the `init()` and `run()` methods following the instructions given in the file
     * Updating `init()`:
         * The `init` method is executed once the real-time scoring service is starting up and is usually used to load the model
         * The model file(s) are automatically injected by AML and the location is available in the environment variable `AZUREML_MODEL_DIR`
-        * For more details look at the existing [`score.py`](../src/model1/score.py)
+        * For more details look at the existing [`score.py`](../models/model1/score.py)
     * Updating `run()`:
         * The `run` method is executed whenever a `HTTP POST` request is received by the service
         * The input to the method is usually JSON, which can be processed and then passed into your model
-        * For more details look at the existing [`score.py`](../src/model1/score.py)
+        * For more details look at the existing [`score.py`](../models/model1/score.py)
         * If you want to receive binary data, e.g., images, you can try use the following code (full example [here](https://github.com/csiebler/unet-pytorch-azureml/blob/master/model/score.py)):
         ```python
         from azureml.contrib.services.aml_request import AMLRequest, rawhttp
@@ -58,7 +58,7 @@
     * To test the model, `POST` a sample request to your local endpoint using a tool of you choice
     * *Option 1* - Test using VSCode with `rest-client`
       * Install the [REST Client extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) for VSCode
-      * Open [`local-endpoint.http`](../src/model1/tests/local-endpoint.http) in VSCode and click `Send Request`
+      * Open [`local-endpoint.http`](../models/model1/tests/local-endpoint.http) in VSCode and click `Send Request`
     * *Option 2* - Use the tool of your choice, e.g., Postman, using the following request structure:
     ```
     POST http://localhost:32000/score HTTP/1.1
@@ -95,7 +95,7 @@
     ```
     * Test using VSCode with `rest-client` (same as above)
       * In the AML Studio UI, goto `Endpoints -> test-deploy-aci -> Consume` and note the `REST endpoint` and `Primary key`
-      * Open [`aci-endpoint.http`](../src/model1/tests/aci-endpoint.http) in VSCode, update your `URL` and `Authorization key`:
+      * Open [`aci-endpoint.http`](../models/model1/tests/aci-endpoint.http) in VSCode, update your `URL` and `Authorization key`:
       ```
       POST http://d42afe74-eb70-4dc0-adb9-xxxxxxxxx.westeurope.azurecontainer.io/score HTTP/1.1
       Content-Type: application/json
@@ -117,7 +117,7 @@
     ```
     * Test using VSCode with `rest-client` (same as above)
       * In the AML Studio UI, goto `Endpoints -> test-deploy-aks -> Consume` and note the `REST endpoint` and `Primary key`
-      * Open [`aks-endpoint.http`](../src/model1/tests/aks-endpoint.http) in VSCode, update your `URL` and `Authorization key`:
+      * Open [`aks-endpoint.http`](../models/model1/tests/aks-endpoint.http) in VSCode, update your `URL` and `Authorization key`:
       ```
       POST http://url-to-your-aks-endpoint/score HTTP/1.1
       Content-Type: application/json

@@ -65,7 +65,7 @@ Instead of using the prior ML pipeline, this CI/CD pipelines just directly uses 
     resourcegroup: 'aml-demo'
     workspace: 'aml-demo'
     aml_compute_target: 'cpu-cluster'  
-    model_path: 'src/model1/'
+    model_path: 'models/model1/'
     experiment: 'train-ci'
     model_name: 'german-credit'
     deployment_name: 'german-credit-api-aci'

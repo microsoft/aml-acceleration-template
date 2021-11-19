@@ -15,3 +15,6 @@ environment:
     enabled: true
     baseImage: mcr.microsoft.com/azureml/base:intelmpi2018.3-ubuntu16.04
     arguments: [-v, C:\some\local\path\to\sample-data:/data]
+docker:
+  useDocker: true,
+  arguments: [-v, C:\some\local\path\to\sample-data:/data]
